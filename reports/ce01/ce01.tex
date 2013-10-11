@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%					Example of Report in LaTeX format                    					   %
+%																			   %
+%	File: ce01.tex	 															   %
+%	Author: ????																   %
+%																			   %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{listings}
+\lstset{%
+  basicstyle=\scriptsize\sffamily,%
+  commentstyle=\footnotesize\ttfamily,%
+  frameround=trBL,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  keywordstyle=\bf
+}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+
+
+\title{Basic Signal Processing}
+\subtitle{Computer Exercise 1}
+\author{name 1  \and name 2}
+\date{10/10/2013}
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+Please write abstract here...	
+\end{abstract}
+
+\section{Introduction}
+
+\section{Material \& Methods}
+\subsection{Mean}
+\subsubsection{Description}
+\subsubsection{Implementation}
+
+\section{Experiments}
+\subsection{Experimental Setup}
+\subsection{Results}
+\subsection{Interpretation / Discussion}
+
+\section{Conclusion}
+
+
+ \end{document}

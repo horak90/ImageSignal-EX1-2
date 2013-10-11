@@ -1,0 +1,241 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%					Example of Report in LaTeX format                    					   %
+%																			   %
+%	File: example.tex															   %
+%	Author: Céline Fouard														   %
+%																			   %
+%	This file aims at giving basic latex commands to be able to write a latex document without 	  %
+%	spending the night...															   %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Comment: everything written after a % and until the end of the line is a comment, this means that
+%  it will not be compiled. It is here only to help whoever writes the code.
+
+\documentclass[a4paper,10pt]{article}
+% This line indicates the type of the document betwin {}: here it is a scientific article.
+% Options betwin [] are not mandatory, but precise here:
+% - a4paper: printing paper format
+% - 10pt: size of the characters
+
+\usepackage{graphicx}
+% This package allows to include images
+\usepackage{titling}
+% This package allows to have a subtitle 
+\usepackage{listings}
+% this package is used to write code samples.
+\lstset{%
+  basicstyle=\scriptsize\sffamily,%
+  commentstyle=\footnotesize\ttfamily,%
+  frameround=trBL,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  keywordstyle=\bf
+}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				Title / Subtitle / Authors and Date									   %
+% This should be adapted to your report.					                                                              %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Example of Report}
+\subtitle{Computer Exercise 0}
+\author{C\'eline Fouard \and Leslie Lamport}
+\date{26/09/2013}
+
+\begin{document}
+% Beginning serious stuff. 
+
+
+\maketitle
+% Actually prints title / subtitle / authors and dat into the document
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Abstract										   %
+% Change the part below the abstract so that it corresponds to your report	                                     %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+	This document is an example to show you how to write an {\em Image and Signal Processing} computer exercise report. It will help you write your own report as you will only have to take the original \textsf{example.tex} file, save it with the name of your report (e.g. \textsf{ce01.tex}) and modify the content to obtain your report in the right format.
+	
+	You should hand in your report {\bf before the next computer exercise}, giving you an average of 2 weeks to complete it. 
+	
+	Your report should be {\em at most} 8 pages long and written with {\bf this} template. The name of the sections should be the same. Subsections are left to your judgment.
+	
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Introductio	n									   %
+%																			   %
+% the command \section{name of the section} begins a new section of the document                            %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+The introduction presents the computer exercise goal and the generic subject (for example signal statistics, etc.).
+Some lecture notions about the subject may be recalled here. 
+{\em Please do {\bf not} copy/past the computer exercise subject (the one you are given as a pdf or a html) here (nor in the other parts)}.
+
+The questions in the subjects are here to help you. Their answers should be found in the paper but within the following subsections and sections. No mention of the question itself is needed.
+
+In any sections, you may also usesome useful \LaTeX commands:\\
+A list for example uses the command \textsf{itemize}
+\begin{itemize}
+\item a first item
+\item a second item
+\item a third item
+\item etc.
+\end{itemize}
+
+You may also want numbers so you can use the \LaTeX command \textsf{enumerate}:
+\begin{enumerate}
+\item a first item
+\item a second item
+\item a third item
+\item etc.
+\end{enumerate}
+
+You can also emphasize text, by
+\begin{itemize}
+\item \texttt{using typewriter text}
+\item {\em emphesized text}
+\item \em {\bf bold text}
+\item \textrm{roman text}
+\item \texttt{typewriter text}
+\item \textsf{san serif text}
+\item \textsc{small caps text}
+\end{itemize}
+
+\section{Material \& Methods}
+In this section, you will summarize all the algorithms and methods you saw during the several parts
+of the computer exercise. For example, for the first exercise, you will introduce here {\em mean} and {\em standard deviation}, of a signal as well as {\em histogram} or {\em random signal generation}.
+
+You may use \LaTeX mathematical formulas:
+\begin{equation}
+\left(\frac{a^{2} + b^{2}}{c^{3}} \right) = 1 \quad
+\mbox{ if } c\neq 0 \mbox{ and if } a > 0.
+\end{equation}
+
+You may also, if you find it useful, create a subsection for each used method/algorithm.
+
+\subsection{Algorithm Example}
+For each algorithm (except if it makes sense to group them all), you may describe them, their use, how do they work, and also the input signals/images as well as their implementation.
+\subsubsection{Description}
+This is what the algorithm is exactly about, what it is used for, and how it works.
+\subsubsection{Implementation}
+If your algorithm leaded to implementation, you may display its code here with the \LaTeX command
+\textsf{lstlisting} as for example:\\
+This algorithm has been implemented int the file \textsf{GeneralSignal.java} with the following code:
+\lstset{language=Java}
+\begin{lstlisting}
+  /**
+   * Save the current signal in the file named filename.
+   * @param filename name of the file where to store the signal.
+   */
+  public void save(String filename) {
+    int nbSamples = this.getNbSamples();
+    String fileContent = "% Signal from Computer Exercise\n";
+    fileContent += "#" + nbSamples + "\n";
+    fileContent += "\n";
+    for (int i = 0; i < nbSamples; i++) {
+      fileContent += data.getX(i) + "\t \t" + data.getY(i) + "\n";
+    }
+    fileContent += "\n";
+
+    try {
+      BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+      out.write(fileContent);
+      out.close();
+    } catch (IOException e) {
+      System.out.println("Could not save file " + filename + " sorry...\n");
+    }
+  }
+\end{lstlisting}
+
+
+\section{Experiments}
+The results of all your experiments should be displayed and explained in this section.
+
+\subsection{Experimental Setup}
+Here you can explain all that needed to be set up for the experiment. For your computer exercises it may be mainly input signals or images. Maybe, they needed preprocessing or special storage or loading. It should be explained here.
+
+\subsubsection{Input Signals/Images}
+If you create signals or images for inputs of your algorithms you should mention it in an {\em Input Signal} or {\em Input Image} sub-section. If you created them manually, you may display their code here with the \LaTeX command \textsf{lstlisting} as for example:
+% before you begin your code snip set, you may specify the language 
+% (among bash, Java, Matlab and others) so that the keywords of your code will be emphasized. 
+\lstset{language=bash}
+% then copy/paste your code in between \begin{lstlisting} and \end{lstlisting}
+\begin{lstlisting}
+% Example of signal
+% Here, you can write comments
+#6
+-5.3 3.401877
+-3.5 -1.056171
+-2  2.830992
+0  2.984400
+1  4.3116474
+3.5 -3.024486
+\end{lstlisting}
+
+You may also want ton include images with the following \textsf{figure} \LaTeX command.
+Figure \ref{myFig} shows an example of Figure integrated within a document.
+% the command \ref{nameOfTheReference} allows to cite the number of an image
+% without having to count them in the document. The image referenced
+% itself (nameOfTheReference) is given by the command \label{nameOfTheReferenc}
+% when the image is described.
+\begin{figure}[ht]
+% begins a figure
+% between []  we precise that we want the image:
+% h : here, and if it is not possible
+% t : top at the top of the page
+\center % allows to center the image in the page
+\includegraphics[width=0.4\linewidth]{myImage.jpg}
+% between [] we give the size of the image with respect to the width of the page line.
+% between {} we give the name of the image file (caution: if the image is in another directory,
+% you have to give the complete relative path.
+\caption{Caption describing the image and its purpose}
+\label{myFig}
+\end{figure}
+
+
+\subsection{Results}
+In results subsection, you may present your results with figures, but also tables.\\
+% \\ forces the line break so that the table begins at a new line
+\begin{tabular}{| l |  c r |}
+% begins a table. 
+% the second {}, here {| l |  c r |} precise the number of table columns (here 3)
+% and their alignment: r for right, l for left and c for center. 
+% You may also notice that some columns uses separator | between them, this
+% means that you will have a line drawn between these columns.
+\hline % horizontal line to delimites the top of the table.
+First cell & Second cell & Third cell \\
+% inside a line, each cell is delimited by the character &
+% the end of a line is set with \\
+\hline % you can use hline to draw a line between 2 table raws.
+Cell L2C1 & Cell L2C2 & Cell L2C3\\
+\hline
+\multicolumn{2}{|c|}{Merging 2 horizontal cells} & Cell L3C3\\
+\hline
+\end{tabular} % end of the table
+
+\subsection{Interpretation / Discussion}
+You may here comment, interprets your results
+
+
+\section{Conclusion}
+The conclusion may be short but should summarized what you learned thanks to this computer exercise.
+
+
+ \end{document}
