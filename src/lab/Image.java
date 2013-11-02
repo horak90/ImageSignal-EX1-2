@@ -82,21 +82,25 @@ public class Image {
     return height;
   }
 
-  public void save(String filename) {
+  public void save(String filename) 
+  {
     File f;
 
     f = new File(filename);
     BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
     // Copy the image in the buffer
     DataBuffer buff = (img.getRaster()).getDataBuffer();
-    for (int j = 0; j < height; j++) {
-      for (int i = 0; i < width; i++) {
+    for (int j = 0; j < height; j++) 
+    {
+      for (int i = 0; i < width; i++) 
+      {
         int k = i + width * j;
         buff.setElem(k, image[j][i]);
       }
     }
+    
     try {
-      String ext = filename.substring(filename.lastIndexOf("."), filename.length()) + 1;
+      //String ext = filename.substring(filename.lastIndexOf("."), filename.length()) + 1;
 //      ImageIO.write(img, ext, f);
       ImageIO.write(img, "png", f);
     } catch (Exception e) {
@@ -162,8 +166,14 @@ public class Image {
   public Signal getAsSignal() {
     Signal signal = new Signal();
     signal.settName("Image");
-    // Write your code here
 
+    for(int i = 0; i < this.height; i++)
+    {
+        for(int j = 0; j < this.width; j++)
+        {
+            signal.addElement((i * this.width) + j, this.image[i][j]);
+        }
+    }    
     return signal;
   }
 
@@ -177,8 +187,28 @@ public class Image {
     this.width = width;
     this.height = height;
     this.image = new char[height][width];
+    double value;
 
-    // Write your code here
+    for(int i = 0; i < this.height; i++)
+    {
+        for(int j = 0; j < this.width; j++)
+        {
+            if(signal.getValueOfIndex((i * this.width) + j) > 255)
+            {
+                value = 255;
+            }else if(signal.getValueOfIndex((i * this.width) + j) < 0)
+            {
+                
+                value = 0;
+            }else
+            {
+                value = signal.getValueOfIndex((i * this.width) + j);
+            }
+            
+            this.image[i][j] = (char)value;
+        }
+    }
+            
   }
 
   /*
@@ -260,6 +290,60 @@ public class Image {
     }
     return result;
   }
+  
+  
+   public Image convolveWithSignal(Signal kernel, int kernelWidth, int kernelHeight) {
+    Image result = new Image(this.width, this.height);
+    int j;  // row    index of the current image
+    int i;  // column index of the current image
+    int jk; // row    index of the kernel;
+    int ik; // column index of the kernel;
+    double newval; // temporary variable to store the voxel value computation
+    // We suppose kernel.height and kernel.width to be odd
+    int kernelCenteri; // index of the central column of the kernel
+    int kernelCenterj; // index of the central row of the kernel
+    double kernelTotalValue;
+
+    kernelCenteri = kernelWidth / 2;
+    kernelCenterj = kernelHeight / 2;
+
+    result.fill((char) 0);
+
+    // Compute the sum of all the values of the kernel.
+    kernelTotalValue = 0.0;
+    for (j = 0; j < kernelHeight; j++)
+      for(i = 0; i < kernelWidth; i++)
+        kernelTotalValue += kernel.getValueOfIndex(i + kernelWidth*j);
+
+    // Actual convolution computation
+    for (j = 0; j < height; j++) {
+      for (i = 0; i < width; i++) {
+
+        newval = 0.0;
+
+        for (jk = 0; jk < kernelHeight; jk++) {
+          for (ik = 0; ik < kernelWidth; ik++) {
+            // (ii, jj):  index of the image where
+            // the (ik, jk) sample of the kernel is
+            int ii = i + ik - kernelCenteri;
+            int jj = j + jk - kernelCenterj;
+
+            // Check the points are inside image (to avoid memory problems)
+            if ((jj > 0) && (jj < this.height) &&
+                    (ii > 0) && (ii < this.width)) {
+              newval += this.image[jj][ii] * kernel.getValueOfIndex(ik + kernelWidth*jk);
+            }
+          }
+        }
+        // Normalization of the value for the image not to be kernelTotalValue times
+        // its original values.
+        newval = newval / kernelTotalValue;
+        result.image[j][i] = (char) newval;
+      }
+    }
+    return result;
+  }
+
 
   /* ************************************************************************* */
   /*                                                                           */

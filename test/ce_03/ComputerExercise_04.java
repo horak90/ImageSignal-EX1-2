@@ -123,9 +123,12 @@ public class ComputerExercise_04 {
 
           newMin = KeyboardIO.readInteger("Please enter the minimum of the new range.\n");
           newMax = KeyboardIO.readInteger("Please enter the maximum of the new range.\n");
+          
+          width = KeyboardIO.readInteger("Please enter the width  of the output image.\n");
+          height = KeyboardIO.readInteger("Please enter the height of the output image.\n");
 
           filteredSignal = signal.stretchContrast((double) newMin, (double) newMax);
-          filteredImage = new Image(filteredSignal, img.getWidth(), img.getHeight());
+          filteredImage = new Image(filteredSignal, width, height);
 
           filteredImage.display();
 
@@ -203,9 +206,11 @@ public class ComputerExercise_04 {
 
           if (img != null) {
             img.display();
-            kernelFilename = KeyboardIO.readString("Please enter the file name of the kernel (as a png image).\n");
-            kernelImage = Image.open(kernelFilename);
-            resultImage = img.convolve(kernelImage);
+            kernelFilename = KeyboardIO.readString("Please enter the file name of the kernel (as a 1D signal).\n");
+            kernelSignal = new Signal(kernelFilename);
+            int kernelWidth  = KeyboardIO.readInteger("Please enter the width  of the kernel\n");
+            int kernelHeight = KeyboardIO.readInteger("Please enter the height of the kernel\n");
+            resultImage = img.convolveWithSignal(kernelSignal, kernelWidth, kernelHeight);
             resultImage.display();
 
             if (KeyboardIO.readYesNo("Do you want to save the output image?\n")) {

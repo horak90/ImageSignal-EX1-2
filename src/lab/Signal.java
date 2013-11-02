@@ -240,7 +240,6 @@ public class Signal extends GeneralSignal {
   public static Signal generateX1(int nbSamples) {
     Signal x1 = new Signal();
     x1.settName("x1[n] = sin(2 Pi n / 100)");
-    // Write your code here
     
     DecimalFormat oneDForm = new DecimalFormat("#.#");     
     
@@ -261,9 +260,7 @@ public class Signal extends GeneralSignal {
    */
   public static Signal generateX2(int nbSamples) {
     Signal x2 = new Signal();
-    x2.settName("x2[n] =  4*exp(-(n-150)^2/300) - exp(-(n-150)^2/2500)");
-    // Write your code here
-    
+    x2.settName("x2[n] =  4*exp(-(n-150)^2/300) - exp(-(n-150)^2/2500)");    
     
     DecimalFormat oneDForm = new DecimalFormat("#.#");     
     
@@ -289,9 +286,7 @@ public class Signal extends GeneralSignal {
    */
   public static Signal generateX3(int nbSamples) {
     Signal x3 = new Signal();
-    x3.settName("x3");
-    // Write your code here
-    
+    x3.settName("x3");    
     
     DecimalFormat oneDForm = new DecimalFormat("#.#");     
     
@@ -353,11 +348,33 @@ public class Signal extends GeneralSignal {
   /**
    * Linear convolve the current signal with the given kernel
    */
-  public Signal linearConvolve(Signal kernel) {
+ public Signal linearConvolve(Signal kernel) {
     Signal result = new Signal();
     result.settName("Convolved signal");
-    // Write your code here
 
+    int n, k;
+    int kMin, kMax;
+    int kernelLength = kernel.getNbSamples();
+    int signalLength = this.getNbSamples();
+    int length = signalLength + kernelLength;
+    double sum;
+    double slope = this.getAbscissaOfIndex(1) - this.getAbscissaOfIndex(0);
+    double C = this.getAbscissaOfIndex(0);
+
+    for (n = 0; n < length - 1; n++) {
+        sum = 0.0;
+        kMin = (n >= kernelLength - 1) ? n - (kernelLength - 1) : 0;
+        kMax = (n < signalLength - 1) ? n : signalLength - 1;
+
+        for (k = kMin; k <= kMax; k++) 
+        {
+            sum += this.getValueOfIndex(k) * kernel.getValueOfIndex(n - k);
+            System.out.print("n=" + n+ "kmin=" + kMin + "kmax=" + kMax + "k=" + k + "n-k" + (n-k) + "\n");
+        }
+       
+        result.addElement(slope*n*1.0 + C, sum);
+    }
+   
     return result;
   }
 
@@ -365,37 +382,28 @@ public class Signal extends GeneralSignal {
    * Circular convolve the current signal with the given kernel
    */
 
-  
-public Signal circularConvolve(Signal kernel) 
+ 
+public Signal circularConvolve(Signal kernel)
 {
     Signal result = new Signal();
     result.settName("Convolved signal");
-    int end = kernel.getNbSamples()/2;
-    int start = (-1) * (kernel.getNbSamples()/2);
+   
+    int circular = 0;
     double sum;
-    int kshift;
     
-    for(int n = 0; n < this.getNbSamples(); n++)
-    {
+    for (int i = 0; i < this.getNbSamples(); i++) {
         sum = 0.0;
-        for (int k = start; k <= end; k++)
-        {
-            if((n-k >= 0)&& (n-k < getNbSamples()) )
-            {
-                if(k < 0)
-                {
-                    kshift = k + kernel.getNbSamples();
-                }else 
-                {
-                    kshift = k;
-                }
-            
-                sum += this.getValueOfIndex(n-k)*kernel.getValueOfIndex(kshift);
-            }
+       
+        for (int j = 0; j < kernel.getNbSamples(); j++) {
+            circular = (i - j) < 0 ? (i - j + kernel.getNbSamples()) : i - j;
+            sum += this.getValueOfIndex(j) * kernel.getValueOfIndex(circular);
         }
-        result.addElement(n, sum);
+       
+        result.addElement(this.getAbscissaOfIndex(i), sum);
     }
+   
     return result;
+
   }
 
   
@@ -434,7 +442,17 @@ public Signal circularConvolve(Signal kernel)
   /* ************************************************************************* */
   public Signal stretchContrast(double newRangeMin, double newRangeMax) {
     Signal signal = new Signal();
-    // Write your code here
+    double a = newRangeMin;
+    double b = newRangeMax;
+    double c = this.getMin();
+    double d = this.getMax();
+    
+    
+    for(int i = 0; i < this.getNbSamples(); i++)
+    {
+        double s = (this.getValueOfIndex(i) - c) * ((b-a)/(d-c)) + a;
+        signal.addElement(i, s);
+    }   
 
     return signal;
   }
