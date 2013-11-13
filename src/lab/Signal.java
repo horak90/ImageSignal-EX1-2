@@ -381,7 +381,7 @@ public class Signal extends GeneralSignal {
   /**
    * Circular convolve the current signal with the given kernel
    */
-
+/*
  
 public Signal circularConvolve(Signal kernel)
 {
@@ -400,12 +400,40 @@ public Signal circularConvolve(Signal kernel)
         }
        
         result.addElement(this.getAbscissaOfIndex(i), sum);
-    }
-   
+    }   
     return result;
 
   }
-
+*/
+ 
+ 
+ 
+ 
+ 
+public Signal circularConvolve(Signal kernel) {
+    Signal result = new Signal();
+    result.settName("Convolved signal");
+int end = kernel.getNbSamples()/2;
+int start = (-1) * (kernel.getNbSamples()/2);
+double sum;
+int kshift;
+for(int n = 0; n < this.getNbSamples(); n++){
+sum = 0.0;
+for (int k = start; k <= end; k++){
+if((n-k >= 0)&& (n-k < getNbSamples()) ){
+if (k < 0){
+kshift = k + kernel.getNbSamples();
+}else {
+kshift = k;
+}
+//System.out.println("n=" + n + "kshift=" + kshift + "n-k" + (n-k) + "\n");
+sum += this.getValueOfIndex(n-k)*kernel.getValueOfIndex(kshift);
+}
+}
+result.addElement(n, sum);
+}
+return result;
+}
   
   /* ************************************************************************* */
   /*                                                                           */
