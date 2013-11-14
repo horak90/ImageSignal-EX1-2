@@ -495,14 +495,28 @@ return result;
    * Computes the Discrete Fourier Transform of the current signal
    * @return DFT of the current signal (as ComplexSignal)
    */
-  public ComplexSignal dft() {
+  public ComplexSignal dft() 
+  {
     ComplexSignal result = new ComplexSignal();
     int nbSamples = this.getNbSamples();
-    // Write your code here
-
-    return result;
-  }
-
+    
+    for(int n = 0; n < nbSamples; n++)
+    {
+        Complex cn= new Complex();
+        
+        for(int k = 0;k < nbSamples; k++)
+        {
+            double angle = -2*Math.PI*k*n/nbSamples;
+            Complex ei = Complex.createFromPolar(1.0, angle);
+            double xk = this.getValueOfIndex(k);
+            ei.multiplyByReal(xk);
+            cn.add(ei);
+        }
+        
+        result.add(cn);
+    }
+return result;
+}
   /**
    * Computes the Inverse Discrete Fourier Transform of the complex signal given
    * in parameters.<br/>
