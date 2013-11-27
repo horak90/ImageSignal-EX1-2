@@ -531,7 +531,22 @@ return result;
   public static Signal idft(ComplexSignal fourier) {
     ComplexSignal result = new ComplexSignal();
     int nbSamples = fourier.getNbSamples();
-    // Write your code here
+    
+    for(int n = 0; n < nbSamples; n++)
+    {
+        Complex cn= new Complex();
+        
+        for(int k = 0;k < nbSamples; k++)
+        {
+            double angle = 2*Math.PI*k*n/nbSamples;
+            Complex ei = Complex.createFromPolar(1.0, angle);
+            ei.mul(fourier.get(k));
+            cn.add(ei);
+        }
+        
+        cn.multiplyByReal(1.0 / nbSamples);
+        result.add(cn);
+    }
 
     return result.getRealSignal();
   }
@@ -545,7 +560,19 @@ return result;
   public static Signal generateDelta(int nonZeroSampleNumber, int numberOfSamples) {
     Signal signal = new Signal();
     signal.settName("Delta_" + nonZeroSampleNumber);
-    // Write your code here
+    
+    
+    for(int i = 0; i < numberOfSamples;i++)
+    {
+        if(i == nonZeroSampleNumber)
+        {
+            signal.addElement(i, 1);
+        }else
+        {
+            signal.addElement(i, 0);
+        }
+        
+    }
 
     return signal;
   }
